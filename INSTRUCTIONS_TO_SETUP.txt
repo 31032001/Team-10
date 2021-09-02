@@ -1,0 +1,29 @@
+INSTRUCTIONS TO SETUP AND RUN THE SOLUTION:
+
+	1.Open the visual studio(vs) code editor.
+	2.Open the downloaded folder stocks.
+	3.Run dashboard.html using live server in vs code editor.
+	4.Type IBM in search box and click search button.
+	5.Hang on for a while till the graph gets displayed, if not then, double click on IBM-stockprice.
+	6.Click on clear button to reset the graph.
+
+            NOTE!!!: we need to select the daily or weekly option before searching the stock data of any company.
+            NOTE!!!: default demonstration of the graph will be in the form of bargraph, in order to get the line graph select the line option before searching for stock data of any company. 
+
+
+DECENT PACKAGE STRUCTURE:
+	
+	1.Stocks
+	    css
+	      1.style.css
+	    js
+	      1.custom.js
+	    README
+	      1.README.txt
+	      2.INSTRUCTIONS TO SETUP AND RUN THE SOLUTION
+
+
+TOOLS USED:
+	1.VS code editor
+	2.Chartjs
+	3.Live server
