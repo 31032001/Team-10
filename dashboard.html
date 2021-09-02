@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock market</title>
+
+
+</head>
+<style>
+    body{
+    margin: 0px;
+}
+.container{
+    width: 100%;
+}
+.search{
+    margin-left: 35%;
+}
+
+h1{
+    text-align: center;
+    font-size: 46px;
+}
+
+#canvas{
+    width: 80%;
+}
+.time{
+    display: inline-block;
+    border: 2px solid black;
+    padding: 4px;
+
+}
+
+</style>
+
+<body>
+    <div class="container">
+        <h1>
+            STOCK MARKET PREDICTOR
+        </h1>
+    </div>
+
+
+
+    <div class='search'>
+        <form method="GET">
+            <iii><input type="search" id="gsearch" name="gsearch"></iii>
+            <input type="button" value="search" id="search" name="search" onclick="my()"></input>
+            <input type="button" value="clear"
+                onclick="window.location.href = 'http://127.0.0.1:5500/dashboard.html'"></input>
+            <input type="radio" value="line" id="line" name="line">Line</input>
+            <div class="time">
+                <input type="radio" value="line" id="week" name="time">Weekly</input>
+                <input type="radio" value="line" id="day" name="time">Daily</input>
+
+            </div>
+
+
+
+        </form>
+    </div>
+
+
+    <div>
+        <canvas id="canvas"></canvas>
+    </div>
+    </div>
+
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+    <!-- <script type="text/javascript" src="js/custom.js"></script> -->
+    <script>
+        function my() {
+            var graph = document.getElementById('line');
+
+            var xmlhttp = new XMLHttpRequest();
+            const Api_key = 'XECYW45UH5DIUTKL';
+            let company_name = document.getElementById('gsearch').value;
+            let time;
+            let period;
+            var week = document.getElementById('week');
+            var day = document.getElementById('day');
+            if (week.checked == true) {
+                period = 'Weekly Adjusted Time Series';
+                time = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=' + company_name + '&apikey=' + Api_key;
+
+            } else if (day.checked == true) {
+                period = 'Time Series (Daily)';
+                time = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=' + company_name + '&outputsize=full&apikey=' + Api_key;
+
+            } else {
+                period = 'Monthly Adjusted Time Series';
+                time = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=' + company_name + '&apikey=' + Api_key;
+
+            }
+
+            let API_call = time;
+            let stockxvalues = [];
+            let stockyvalues = [];
+            let stockreverse = [];
+            let str1;
+            console.log(company_name);
+
+            xmlhttp.open("GET", API_call, true);
+            xmlhttp.send();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    // console.log(data);
+
+                    for (var key in data[period]) {
+                        stockxvalues.push(key);
+                        stockyvalues.push(data[period][key]['4. close']);
+                    }
+
+                    // console.log(stockyvalues);
+
+
+
+                }
+            }
+            if (graph.checked == true) {
+                str1 = 'line';
+            } else {
+                str1 = 'bar';
+            }
+
+
+
+            var ctx = document.getElementById('canvas').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: str1,
+                data: {
+                    labels: stockxvalues,
+                    datasets: [{
+                        label: company_name + '- Stock Price',
+                        data: stockyvalues,
+                        backgroundColor: 'transparent',
+                        borderColor: 'blue',
+                        borderWidth: 1,
+                    },
+
+                    ]
+                },
+                options: {
+                    elements: {
+                        line: {
+                            tension: 0
+                        }
+
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+        }
+    </script>
+
+
+</body>
+
+</html>
